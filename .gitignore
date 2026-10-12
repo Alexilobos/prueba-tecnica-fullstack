@@ -1,0 +1,20 @@
+# Sistema operativo / editores
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+*.swp
+
+# Dart / Flutter
+.dart_tool/
+.packages
+build/
+coverage/
+
+# Secretos: nunca se suben al repositorio
+.env
+*.env
+!*.env.example
+*.jks
+*.keystore
+key.properties
