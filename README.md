@@ -61,3 +61,8 @@ La pantalla de listado muestra: **cargando**, **error** entendible con botón **
 - Una pantalla **Favoritos** (accesible desde el AppBar del listado) los muestra del **más reciente
   al más antiguo**, con título, precio y etiquetas; funciona **sin conexión**; muestra un mensaje si está vacía.
 - Explica tu esquema en `RESPUESTAS.md` (pregunta P2).
+
+
+---
+
+Crear un PR con la solución
