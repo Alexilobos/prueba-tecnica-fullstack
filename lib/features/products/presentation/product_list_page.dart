@@ -153,8 +153,7 @@ class _ProductListPageState extends State<ProductListPage> {
                           child: _ProductCard(
                             product: product,
                             favorite: controller.isFavorite(product),
-                            onFavorite: () =>
-                                controller.toggleFavorite(product),
+                            onFavorite: () => _toggleFavorite(product),
                           ),
                         ),
                       ),
@@ -167,6 +166,21 @@ class _ProductListPageState extends State<ProductListPage> {
       ),
     );
   }
+
+  Future<void> _toggleFavorite(Product product) async {
+    final wasFavorite = widget.controller.isFavorite(product);
+    final failure = await widget.controller.toggleFavorite(product);
+    if (!mounted) return;
+
+    final text = failure != null
+        ? failure.message
+        : wasFavorite
+        ? 'Se quitó de favoritos'
+        : 'Se agregó a favoritos';
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(text)));
+  }
 }
 
 class _ProductCard extends StatelessWidget {
@@ -177,7 +191,7 @@ class _ProductCard extends StatelessWidget {
   });
   final Product product;
   final bool favorite;
-  final VoidCallback onFavorite;
+  final Future<void> Function() onFavorite;
 
   @override
   Widget build(BuildContext context) => Card(
@@ -230,7 +244,7 @@ class _ProductCard extends StatelessWidget {
               favorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
             ),
             color: favorite ? Theme.of(context).colorScheme.error : null,
-            onPressed: onFavorite,
+            onPressed: () => onFavorite(),
           ),
         ],
       ),

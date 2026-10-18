@@ -67,7 +67,7 @@ class ProductListController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleFavorite(Product product) async {
+  Future<Failure?> toggleFavorite(Product product) async {
     final saved = isFavorite(product);
     saved ? _favoriteIds.remove(product.id) : _favoriteIds.add(product.id);
     notifyListeners();
@@ -79,5 +79,6 @@ class ProductListController extends ChangeNotifier {
       message = failure.message;
       notifyListeners();
     }
+    return failure;
   }
 }
