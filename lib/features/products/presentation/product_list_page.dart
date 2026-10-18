@@ -104,13 +104,8 @@ class _ProductListPageState extends State<ProductListPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _CatalogHeader(
-                      total: controller.products.length,
-                      filtered: controller.selectedTag != null,
-                    ),
-                    const SizedBox(height: 24),
                     const Text(
-                      'Explora por etiqueta',
+                      'Etiquetas populares',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 16,
@@ -128,6 +123,7 @@ class _ProductListPageState extends State<ProductListPage> {
                               selected:
                                   controller.selectedTag?.toLowerCase() ==
                                   tag.toLowerCase(),
+                              showCheckmark: false,
                               onSelected: (_) => controller.toggleTag(tag),
                             ),
                           )
@@ -137,7 +133,7 @@ class _ProductListPageState extends State<ProductListPage> {
                     Text(
                       controller.selectedTag == null
                           ? 'Productos'
-                          : 'Resultados para “${controller.selectedTag}”',
+                          : '“${controller.selectedTag}”',
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 18,
@@ -171,45 +167,6 @@ class _ProductListPageState extends State<ProductListPage> {
       ),
     );
   }
-}
-
-class _CatalogHeader extends StatelessWidget {
-  const _CatalogHeader({required this.total, required this.filtered});
-  final int total;
-  final bool filtered;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(20),
-    decoration: BoxDecoration(
-      color: Theme.of(context).colorScheme.primaryContainer,
-      borderRadius: BorderRadius.circular(24),
-    ),
-    child: Row(
-      children: [
-        const CircleAvatar(radius: 25, child: Icon(Icons.storefront_outlined)),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Catálogo de productos',
-                style: Theme.of(context).textTheme.titleLarge
-                    ?.copyWith(fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 3),
-              Text(
-                filtered
-                    ? '$total productos encontrados'
-                    : '$total productos para descubrir',
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
 }
 
 class _ProductCard extends StatelessWidget {

@@ -61,8 +61,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _FavoritesHeader(total: items.length),
-                    const SizedBox(height: 20),
                     ...items.map(
                       (favorite) => Padding(
                         padding: const EdgeInsets.only(bottom: 10),
@@ -76,41 +74,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
           ],
         );
       },
-    ),
-  );
-}
-
-class _FavoritesHeader extends StatelessWidget {
-  const _FavoritesHeader({required this.total});
-  final int total;
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(20),
-    decoration: BoxDecoration(
-      color: Theme.of(context).colorScheme.errorContainer,
-      borderRadius: BorderRadius.circular(24),
-    ),
-    child: Row(
-      children: [
-        const CircleAvatar(radius: 25, child: Icon(Icons.favorite_rounded)),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Tus favoritos',
-                style: Theme.of(context).textTheme.titleLarge
-                    ?.copyWith(fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 3),
-              Text(
-                '$total ${total == 1 ? 'producto guardado' : 'productos guardados'}',
-              ),
-            ],
-          ),
-        ),
-      ],
     ),
   );
 }
