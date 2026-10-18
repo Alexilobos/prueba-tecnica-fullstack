@@ -47,8 +47,11 @@ class TiendaApp extends StatelessWidget {
     debugShowCheckedModeBanner: false,
     title: 'TiendaApp',
     theme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff006a62)),
       useMaterial3: true,
+      scaffoldBackgroundColor: const Color(0xfffbfdfc),
+      appBarTheme: const AppBarTheme(centerTitle: false),
+      cardTheme: const CardThemeData(margin: EdgeInsets.zero),
     ),
     home: ProductListPage(controller: controller, getFavorites: getFavorites),
   );

@@ -19,7 +19,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
   Future<List<ProductModel>> getProducts() async {
     try {
       final response = await _client.get(
-        Uri.parse('https://dummyjson.com/products?limit=20'),
+        Uri.parse('https://dummyjson.com/products?limit=20&delay=2000'),
       );
       if (response.statusCode != 200) {
         throw ServerException(

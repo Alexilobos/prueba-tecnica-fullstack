@@ -38,36 +38,160 @@ class _FavoritesPageState extends State<FavoritesPage> {
           return const Center(child: CircularProgressIndicator());
         }
         if (_error != null) {
-          return Center(child: Text(_error!));
+          return _FavoriteEmpty(
+            icon: Icons.error_outline_rounded,
+            title: 'No se pudieron cargar los favoritos',
+            message: _error!,
+          );
         }
         final items = snapshot.data ?? const [];
         if (items.isEmpty) {
-          return const Center(
-            child: Text('Aún no tienes productos favoritos.'),
+          return const _FavoriteEmpty(
+            icon: Icons.favorite_border_rounded,
+            title: 'Aún no tienes favoritos',
+            message: 'Guarda productos para encontrarlos rápidamente aquí.',
           );
         }
-        return ListView.builder(
-          padding: const EdgeInsets.all(12),
-          itemCount: items.length,
-          itemBuilder: (_, i) => Card(
-            child: ListTile(
-              title: Text(items[i].title),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('\$${items[i].price.toStringAsFixed(2)}'),
-                  Wrap(
-                    spacing: 4,
-                    children: items[i].tags
-                        .map((tag) => Chip(label: Text(tag)))
-                        .toList(),
-                  ),
-                ],
+        return ListView(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
+          children: [
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 760),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _FavoritesHeader(total: items.length),
+                    const SizedBox(height: 20),
+                    ...items.map(
+                      (favorite) => Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: _FavoriteCard(favorite: favorite),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
+          ],
         );
       },
+    ),
+  );
+}
+
+class _FavoritesHeader extends StatelessWidget {
+  const _FavoritesHeader({required this.total});
+  final int total;
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.errorContainer,
+      borderRadius: BorderRadius.circular(24),
+    ),
+    child: Row(
+      children: [
+        const CircleAvatar(radius: 25, child: Icon(Icons.favorite_rounded)),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Tus favoritos',
+                style: Theme.of(context).textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                '$total ${total == 1 ? 'producto guardado' : 'productos guardados'}',
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class _FavoriteCard extends StatelessWidget {
+  const _FavoriteCard({required this.favorite});
+  final FavoriteProduct favorite;
+  @override
+  Widget build(BuildContext context) => Card(
+    elevation: 0,
+    color: Theme.of(context).colorScheme.surfaceContainerLow,
+    child: Padding(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  favorite.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                '\$${favorite.price.toStringAsFixed(2)}',
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          if (favorite.tags.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: favorite.tags
+                  .map(
+                    (tag) => Chip(
+                      visualDensity: VisualDensity.compact,
+                      label: Text(tag),
+                    ),
+                  )
+                  .toList(growable: false),
+            ),
+          ],
+        ],
+      ),
+    ),
+  );
+}
+
+class _FavoriteEmpty extends StatelessWidget {
+  const _FavoriteEmpty({
+    required this.icon,
+    required this.title,
+    required this.message,
+  });
+  final IconData icon;
+  final String title;
+  final String message;
+  @override
+  Widget build(BuildContext context) => Center(
+    child: Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 56, color: Theme.of(context).colorScheme.outline),
+          const SizedBox(height: 12),
+          Text(title, style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 5),
+          Text(message, textAlign: TextAlign.center),
+        ],
+      ),
     ),
   );
 }
