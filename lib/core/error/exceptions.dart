@@ -1,5 +1,7 @@
 class ServerException implements Exception {
-  const ServerException([this.message = 'El servidor no pudo procesar la solicitud.']);
+  const ServerException([
+    this.message = 'El servidor no pudo procesar la solicitud.',
+  ]);
 
   final String message;
 }
@@ -9,7 +11,9 @@ class NetworkException implements Exception {
 }
 
 class CacheException implements Exception {
-  const CacheException([this.message = 'No se pudieron guardar los favoritos.']);
+  const CacheException([
+    this.message = 'No se pudieron guardar los favoritos.',
+  ]);
 
   final String message;
 }

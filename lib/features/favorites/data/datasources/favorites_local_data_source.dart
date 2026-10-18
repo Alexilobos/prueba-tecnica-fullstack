@@ -53,7 +53,11 @@ class FavoritesLocalDataSourceImpl implements FavoritesLocalDataSource {
         'thumbnail_url': product.thumbnailUrl,
         'added_at': addedAt.millisecondsSinceEpoch,
       }, conflictAlgorithm: ConflictAlgorithm.replace);
-      await transaction.delete('favorite_tags', where: 'favorite_id = ?', whereArgs: [product.id]);
+      await transaction.delete(
+        'favorite_tags',
+        where: 'favorite_id = ?',
+        whereArgs: [product.id],
+      );
       for (final tag in product.tags) {
         await transaction.insert('favorite_tags', {
           'favorite_id': product.id,
@@ -73,13 +77,16 @@ class FavoritesLocalDataSourceImpl implements FavoritesLocalDataSource {
     final byId = <int, _FavoriteBuilder>{};
     for (final row in rows) {
       final id = row['id'] as int;
-      final favorite = byId.putIfAbsent(id, () => _FavoriteBuilder(
-        id: id,
-        title: row['title'] as String,
-        price: (row['price'] as num).toDouble(),
-        thumbnailUrl: row['thumbnail_url'] as String,
-        addedAt: DateTime.fromMillisecondsSinceEpoch(row['added_at'] as int),
-      ));
+      final favorite = byId.putIfAbsent(
+        id,
+        () => _FavoriteBuilder(
+          id: id,
+          title: row['title'] as String,
+          price: (row['price'] as num).toDouble(),
+          thumbnailUrl: row['thumbnail_url'] as String,
+          addedAt: DateTime.fromMillisecondsSinceEpoch(row['added_at'] as int),
+        ),
+      );
       final tag = row['tag'] as String?;
       if (tag != null) favorite.tags.add(tag);
     }
@@ -87,12 +94,23 @@ class FavoritesLocalDataSourceImpl implements FavoritesLocalDataSource {
   }
 
   @override
-  Future<void> removeFavorite(int productId) => (await _db).delete(
-        'favorites', where: 'id = ?', whereArgs: [productId]);
+  Future<void> removeFavorite(int productId) async {
+    await (await _db).delete(
+      'favorites',
+      where: 'id = ?',
+      whereArgs: [productId],
+    );
+  }
 }
 
 class _FavoriteBuilder {
-  _FavoriteBuilder({required this.id, required this.title, required this.price, required this.thumbnailUrl, required this.addedAt});
+  _FavoriteBuilder({
+    required this.id,
+    required this.title,
+    required this.price,
+    required this.thumbnailUrl,
+    required this.addedAt,
+  });
   final int id;
   final String title;
   final double price;
@@ -100,5 +118,12 @@ class _FavoriteBuilder {
   final DateTime addedAt;
   final tags = <String>[];
 
-  FavoriteProduct build() => FavoriteProduct(id: id, title: title, price: price, thumbnailUrl: thumbnailUrl, tags: List.unmodifiable(tags), addedAt: addedAt);
+  FavoriteProduct build() => FavoriteProduct(
+    id: id,
+    title: title,
+    price: price,
+    thumbnailUrl: thumbnailUrl,
+    tags: List.unmodifiable(tags),
+    addedAt: addedAt,
+  );
 }

@@ -13,5 +13,7 @@ class NetworkFailure extends Failure {
 }
 
 class CacheFailure extends Failure {
-  const CacheFailure([super.message = 'No se pudieron actualizar los favoritos.']);
+  const CacheFailure([
+    super.message = 'No se pudieron actualizar los favoritos.',
+  ]);
 }

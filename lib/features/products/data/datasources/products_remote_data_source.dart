@@ -22,7 +22,9 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
         Uri.parse('https://dummyjson.com/products?limit=20'),
       );
       if (response.statusCode != 200) {
-        throw ServerException('El servidor respondió con código ${response.statusCode}.');
+        throw ServerException(
+          'El servidor respondió con código ${response.statusCode}.',
+        );
       }
 
       final body = jsonDecode(response.body) as Map<String, dynamic>;
