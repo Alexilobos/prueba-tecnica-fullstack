@@ -4,9 +4,11 @@ import '../../../core/error/failures.dart';
 import '../../favorites/domain/usecases/get_favorites.dart';
 import '../../favorites/domain/usecases/remove_favorite.dart';
 import '../../favorites/domain/usecases/save_favorite.dart';
+
+import 'package:tienda_app/top_tags.dart' as tag_algorithm;
+
 import '../domain/entities/product.dart';
 import '../domain/usecases/get_products.dart';
-import '../domain/usecases/top_tags.dart';
 
 enum ProductListStatus { loading, content, empty, error, offline }
 
@@ -37,7 +39,10 @@ class ProductListController extends ChangeNotifier {
               ),
             )
             .toList();
-  List<String> get tags => topTags(_all);
+  List<String> get tags => tag_algorithm.topTags(
+    _all.expand((product) => product.tags).toList(growable: false),
+    5,
+  );
   bool isFavorite(Product product) => _favoriteIds.contains(product.id);
 
   Future<void> load() async {
