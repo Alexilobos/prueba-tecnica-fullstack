@@ -24,10 +24,3 @@ La consulta usa `&delay=2000` para hacer visible el estado de carga.
 flutter analyze
 flutter test
 ```
-
-## Pruebas manuales sugeridas
-
-1. Filtrar y quitar un filtro desde las etiquetas populares.
-2. Agregar y quitar favoritos; aparecerá una confirmación inferior.
-3. Cerrar y abrir la app para comprobar que los favoritos permanecen.
-4. Activar modo avión: el listado muestra "Sin conexión" y Favoritos continúa disponible.
